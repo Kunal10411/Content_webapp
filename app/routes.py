@@ -1,12 +1,17 @@
-
+import os
+from dotenv import load_dotenv
 import requests
 from flask import Flask, render_template, request
 import logging  # Import logging module
 
 app = Flask(__name__)
 
-
-API_KEY = '<youtube_api_token>'
+# Replace this with your actual API key
+load_dotenv()
+API_KEY = os.getenv('API_KEY')
+if not API_KEY:  # Check if API_KEY is set
+    logging.error("API_KEY is not set. Please set the environment variable.")
+    raise ValueError("API_KEY is not set.")
 
 # Set up logging configuration
 logging.basicConfig(level=logging.DEBUG)
@@ -14,6 +19,7 @@ logging.basicConfig(level=logging.DEBUG)
 @app.route('/search', methods=['GET'])
 def search():
     query = request.args.get('query', 'Python tutorial')  # Default search query if none provided
+    logging.debug(f'Search query: {query}')  # Log the search query
     youtube_data = fetch_youtube_data(query)
     return render_template('search_results.html', videos=youtube_data)
 
@@ -26,15 +32,16 @@ def fetch_youtube_data(query):
         'maxResults': 15
     }
 
-    response = requests.get(url, params=params)
-    
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()  # Raise an error for bad responses
+    except requests.exceptions.RequestException as e:
+        logging.error(f'Error fetching data from YouTube API: {e}')
+        return []  # Return an empty list if there's an error
+
     # Log the response status and content for debugging
     logging.debug(f'Response Status Code: {response.status_code}')
     logging.debug(f'Response Content: {response.text}')
-
-    # Check if the response was successful
-    if response.status_code != 200:
-        return []  # Return an empty list if there's an error
 
     data = response.json()
 
@@ -54,3 +61,5 @@ def fetch_youtube_data(query):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+print(f"API_KEY: {API_KEY}")  # Debugging line to check if API_KEY is loaded
