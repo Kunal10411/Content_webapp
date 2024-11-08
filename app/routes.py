@@ -4,7 +4,7 @@ import requests  # or any other library to fetch YouTube data
 app = Flask(__name__)
 
 # Example YouTube data (you can replace this with actual API calls)
-youtube_data = "AIzaSyAmZZP2uzT_u8ofj3dO_ZTtUtLmRDYKOm8"
+youtube_data = "<youtube_api_token>"
 
 @app.route('/search')
 def search():
