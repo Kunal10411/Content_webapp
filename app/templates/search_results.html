@@ -3,81 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Search Results</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 20px;
-        }
-
-        .video-list {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .video-item {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            text-align: center;
-            padding: 10px;
-        }
-
-        .video-item img {
-            width: 100%;
-            border-radius: 8px;
-        }
-
-        .video-item h2 {
-            font-size: 18px;
-            margin-top: 10px;
-            color: #333;
-        }
-
-        .video-item p {
-            color: #666;
-            font-size: 14px;
-            margin: 5px 0;
-        }
-
-        .video-item a {
-            display: block;
-            color: #007BFF;
-            text-decoration: none;
-            margin-top: 10px;
-        }
-
-        .video-item a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
+    <div class="container">
+        <h1 class="main-title">Top Trending Search</h1>
 
-<div class="container">
-    <h1>YouTube Search Results</h1>
-    <div class="video-list">
-        {% for video in videos %}
-            <div class="video-item">
-                <h2>{{ video['title'] }}</h2>  <!-- Corrected here -->
-                <p>{{ video['description'] }}</p>  <!-- Corrected here -->
-                <a href="https://www.youtube.com/watch?v={{ video['video_id'] }}" target="_blank">
-                    <img src="{{ video['thumbnail_url'] }}" alt="{{ video['title'] }}">
-                </a>
+        {% if videos|length == 0 %}
+            <p class="no-results">No videos found. Try a different search term!</p>
+        {% else %}
+            <div class="video-grid">
+                {% for video in videos %}
+                <div class="video-card video" data-video-id="{{ video.video_id }}">
+                    <img src="{{ video.thumbnail_url }}" alt="{{ video.title }}" class="thumbnail">
+                    <div class="video-info">
+                        <h3 class="video-title">{{ video.title }}</h3>
+                        <p class="video-description">{{ video.description[:100] }}...</p>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-        {% endfor %}
+        {% endif %}
     </div>
-</div>
 
+    <!-- Script to handle video clicks and open them in a new tab -->
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
 </html>

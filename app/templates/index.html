@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trendly</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="main-title">Welcome to Trendly</h1>
+        
+        <!-- Centralized search box -->
+        <form action="/search" method="get" class="search-form">
+            <div class="search-bar">
+                <input 
+                    type="text" 
+                    name="query" 
+                    placeholder="Type content to be searched..." 
+                    autofocus 
+                    required
+                >
+                <button type="submit">🔍</button>
+            </div>
+        </form>
+
+        <!-- Trending Section -->
+        <div class="trending-section">
+            <h2>Trending Now</h2>
+            <div class="trending-videos">
+                {% for video in videos %}
+                <div class="video" data-video-url="{{ video.url }}">
+                    <img src="{{ video.thumbnail_url }}" alt="{{ video.title }}" class="thumbnail">
+                    <p class="title">{{ video.title }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Video -->
+    <div id="video-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-modal" class="close">&times;</span>
+            <iframe id="video-frame" width="100%" height="400" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='css/script.js') }}"></script>
+</body>
+</html>
