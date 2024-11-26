@@ -4,7 +4,14 @@ import requests
 from flask import Blueprint, Flask, render_template, request
 import logging  # Import logging module
 
+main=Blueprint('main', __name__)
+
 app = Flask(__name__)
+
+@main.route('/')
+def index():
+    return "Hello, World!"
+
 
 # Load environment variables from .env file
 load_dotenv()
