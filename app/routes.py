@@ -16,6 +16,19 @@ if not API_KEY:  # Check if API_KEY is set
 # Set up logging configuration
 logging.basicConfig(level=logging.DEBUG)
 
+@app.route('/api/videos', methods=['GET'])
+def api_videos():
+    category = request.args.get('category', '')
+    upload_date = request.args.get('uploadDate', '')
+    duration = request.args.get('videoDuration', '')
+
+    # Build query for YouTube API
+    query = f"{category} {upload_date} {duration}".strip()
+    videos = fetch_youtube_data(query)  # Reuse your existing function
+
+    return {"videos": videos}
+
+
 @app.route('/')
 def home():
     # Fetch trending videos on initial load
