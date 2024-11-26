@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 import requests
-from flask import Flask, render_template, request
+from flask import Blueprint, Flask, render_template, request
 import logging  # Import logging module
 
 app = Flask(__name__)
